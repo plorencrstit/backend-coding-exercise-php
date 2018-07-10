@@ -49,7 +49,7 @@ Premium meat selection;;
 Breakfast;gluten,eggs
 ``` 
 
-## Guidelines
+## Additional Notes
 
 Structure your code as if this was a real, production application. You may however choose to provide simplified implementations for some aspects (e.g. in-memory persistence instead of a full database if you think any persistence is required at all).
 
