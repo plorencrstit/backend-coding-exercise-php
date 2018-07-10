@@ -42,11 +42,11 @@ Calling your application with the example input on 20/10/15 at 12 AM with the pa
 Breakfast;gluten,eggs
 ````
     
-Using the same input on 20/10/15 at 12 AM with the parameters `24/10/15 11:00 NW43QB 20` would print the following:
+Using the same input on 20/10/15 at 12 AM with the parameters `24/10/15 11:00 NW43QB 20` should print the following lines:
 
 ```
 Premium meat selection;;
-reakfast;gluten,eggs
+Breakfast;gluten,eggs
 ``` 
 
 ## Guidelines
