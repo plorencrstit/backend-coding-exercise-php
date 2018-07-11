@@ -36,13 +36,13 @@ new line     = "\r\n"
 
 You may use [this example input file](./example-input).    
 
-Calling your application with the example input on 20/10/15 at 12 AM with the parameters `21/10/15 11:00 NW43QB 20` should print the following lines:
+If today is *10/11/18, 12 AM* then calling your application with the example input and the parameters `11/11/18 11:00 NW43QB 20` should print the following lines:
 
 ```
 Breakfast;gluten,eggs
 ````
     
-Using the same input on 20/10/15 at 12 AM with the parameters `24/10/15 11:00 NW43QB 20` should print the following lines:
+On the same day, calling your application with the parameters `14/11/18 11:00 NW43QB 20` should print the following lines:
 
 ```
 Premium meat selection;;
