@@ -4,6 +4,7 @@ namespace App\Service;
 use App\Model\Task;
 use App\Model\Vendor;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -13,10 +14,15 @@ class ValidatorService {
      * @var ValidatorInterface
      */
     private $validator;
+    /**
+     * @var ConsoleOutputInterface
+     */
+    private $console;
 
-    public function __construct(ValidatorInterface $validator) {
+    public function __construct(ValidatorInterface $validator, ConsoleOutputInterface $console) {
 
         $this->validator = $validator;
+        $this->console = $console;
     }
 
     public function task(InputInterface $input): Task
@@ -56,7 +62,7 @@ class ValidatorService {
     {
         if (count($errors) > 0) {
             $errorsString = (string)$errors;
-            throw new ValidatorException($errorsString); // TODO: don't break code, just omit vendor
+            $this->console->writeln($errorsString);
         }
     }
 }

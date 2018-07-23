@@ -17,6 +17,10 @@ App\Model\Vendor:
         name:
             - Regex: '/[A-Za-z ]*/'
         postcode:
-            - Regex: '/[A-Za-z][A-Za-z0-9]*/'
+            - Regex: '/^[A-Za-z]{1}[A-Za-z0-9]*/'
+
         maxCovers:
+            - Type:
+                type: integer
             - Regex: '/\d*/'
+
