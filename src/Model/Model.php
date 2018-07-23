@@ -1,7 +1,7 @@
 <?php
 namespace App\Model;
 
-class Model
+abstract class Model
 {
     protected $id;
 

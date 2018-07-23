@@ -20,13 +20,11 @@ class Vendor extends Model
 
     public static function createFromString(string $line) : ?self
     {
-
         if(empty($line)){
             return null;
         }
 
         $data = explode(';', $line);
-//        var_dump($data);
 
         if(count($data) != 3) {
             return null;
@@ -42,10 +40,6 @@ class Vendor extends Model
         $postcode = $result['postcode'][0];
         $maxCovers = $result['maxCovers'][0];
 
-//        var_dump('name: ' . $name);
-//        var_dump('postcode: ' . $postcode);
-//        var_dump('maxCovers: ' . $maxCovers);
-
         if($name && $postcode && $maxCovers) {
             return new Vendor($name, $postcode, $maxCovers);
         }
@@ -55,12 +49,8 @@ class Vendor extends Model
 
     public function validate($postcode, $covers): bool
     {
-
         $vendorShortPostcode = $this->getShortPostcode();
         $orderShortPostcode = $this->getShortPostcode($postcode);
-
-//        var_dump($vendorShortPostcode);
-//        var_dump($orderShortPostcode);
 
         if($vendorShortPostcode != $orderShortPostcode) {
             return false;
@@ -73,7 +63,7 @@ class Vendor extends Model
         return true;
     }
 
-    private function getShortPostcode($postcode = null)
+    private function getShortPostcode(string $postcode = null): string
     {
         $postcode = $postcode ?? $this->postcode;
 

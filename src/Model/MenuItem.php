@@ -20,9 +20,8 @@ class MenuItem extends Model
         self::$counter++;
     }
 
-    public static function createFromString(string $line, $vendorId) : ?self
+    public static function createFromString(string $line, int $vendorId) : ?self
     {
-
         if(empty($line)){
             return null;
         }
@@ -63,7 +62,7 @@ class MenuItem extends Model
         return true;
     }
 
-    public function toString() {
+    public function toString(): string {
         return $this->name . ';' . $this->allergies . ';' . $this->advanceTime . 'h';
     }
 }

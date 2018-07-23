@@ -20,22 +20,22 @@ class Task extends Model
         $this->orderedAt = new DateTime('now');
     }
 
-    public function getSearchDateTime()
+    public function getSearchDateTime(): DateTime
     {
         return DateTime::createFromFormat('d/m/y H:i', $this->day . ' ' . $this->time);
     }
 
-    public function getPeriod()
+    public function getPeriod(): int
     {
         return $this->getSearchDateTime()->getTimestamp() - $this->orderedAt->getTimestamp();
     }
 
-    public function isOrderDateValid()
+    public function isOrderDateValid(): bool
     {
         return $this->getSearchDateTime()->getTimestamp() > $this->orderedAt->getTimestamp();
     }
 
-    public function getPeriodInHours()
+    public function getPeriodInHours(): int
     {
         return floor($this->getPeriod() / 3660);
     }

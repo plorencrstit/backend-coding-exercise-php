@@ -41,7 +41,7 @@ class ExerciseCommand extends Command
         $day = $input->getArgument('day');
         $time = $input->getArgument('time');
         $location = $input->getArgument('location');
-        $covers = (int) $input->getArgument('covers');
+        $covers = $input->getArgument('covers');
 
 //        $output->writeln('Filename: ' . $filename);
 //        $output->writeln('Day: ' . $day);
@@ -51,15 +51,15 @@ class ExerciseCommand extends Command
 
         $task = new Task($day, $time, $location, $covers);
 
-        if(!$task->isOrderDateValid()){
-            $output->writeln('Your order date is past!');
-            return;
-        }
-
         $errors = $this->validator->validate($task);
         if (count($errors) > 0) {
             $errorsString = (string) $errors;
             $output->writeln($errorsString);
+            return;
+        }
+
+        if(!$task->isOrderDateValid()){
+            $output->writeln('Your order date is past!');
             return;
         }
 
@@ -94,7 +94,7 @@ class ExerciseCommand extends Command
         $vendors = array_filter($vendors);
         $menuItems = array_filter($menuItems);
 
-        var_dump('Number of vendors BEFORE validation: ' . count($vendors));
+//        var_dump('Number of vendors BEFORE validation: ' . count($vendors));
 
         foreach($vendors as $key => $vendor) {
             $isValidated = $vendor->validate($location, $covers);
@@ -103,14 +103,14 @@ class ExerciseCommand extends Command
             }
         }
 
-        var_dump('Number of vendors AFTER validation: ' . count($vendors));
+//        var_dump('Number of vendors AFTER validation: ' . count($vendors));
 
         $vendorsId = $this->getIds($vendors);
 
 //        var_dump($vendorsId);
 //        var_dump($vendors);
 
-        var_dump('Number of items BEFORE validation: ' . count($menuItems));
+//        var_dump('Number of items BEFORE validation: ' . count($menuItems));
 
         foreach($menuItems as $key => $menuItem) {
             $isValidated = $menuItem->validate($task->getPeriodInHours(), $vendorsId);
@@ -119,20 +119,16 @@ class ExerciseCommand extends Command
             }
         }
 
-        var_dump('Number of items AFTER validation: ' . count($menuItems));
+//        var_dump('Number of items AFTER validation: ' . count($menuItems));
 
-//        var_dump($menuItems);
         foreach($menuItems as $menuItem) {
             $output->writeln($menuItem->toString());
         }
 
-    //    var_dump($availableItems);
-
-
     }
 
-    public function getVendor($line): ?Vendor {
-//        var_dump('Get vendor from: ' . $line);
+    public function getVendor($line): ?Vendor
+    {
         $vendor = Vendor::createFromString($line);
 
         if($vendor){
@@ -144,11 +140,9 @@ class ExerciseCommand extends Command
         return null;
     }
 
-    public function getMenuItem($line): ?MenuItem {
-//        var_dump('Get menuItem from: ' . $line);
-
+    public function getMenuItem($line): ?MenuItem
+    {
         $menuItem = MenuItem::createFromString($line, $this->vendorIdPointer);
-
         $this->pointer = ($menuItem) ? Pointer::MENU_ITEM : Pointer::NEW_LINE;
 
         return $menuItem;
@@ -162,7 +156,8 @@ class ExerciseCommand extends Command
         $this->validator = $validator;
     }
 
-    public function getIds(array $data){
+    public function getIds(array $data): array
+    {
         $result = [];
         foreach($data as $object) {
             $result[] = $object->getId();
