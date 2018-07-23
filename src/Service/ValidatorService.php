@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Model\MenuItem;
 use App\Model\Task;
 use App\Model\Vendor;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,7 +36,11 @@ class ValidatorService {
         $task = new Task($day, $time, $location, $covers);
 
         $errors = $this->validator->validate($task);
-        $this->checkErrors($errors);
+        $is_valid = $this->checkErrors($errors);
+
+        if(!$is_valid) {
+            throw new ValidatorException($errors);
+        }
 
         if(!$task->isOrderDateValid()){
             throw new ValidatorException('Your order date is past!');
@@ -44,25 +49,34 @@ class ValidatorService {
         return $task;
     }
 
-    public function vendor(array $data): Vendor
+    public function vendor(array $data): ?Vendor
     {
         $vendor = new Vendor($data['name'], $data['postcode'], $data['maxCovers']);
-        var_dump($vendor);
 
         $errors = $this->validator->validate($vendor);
-        $this->checkErrors($errors);
+        $is_valid = $this->checkErrors($errors);
 
-        return $vendor;
+        return ($is_valid) ? $vendor : null;
     }
 
-    /**
-     * @param $errors
-     */
-    private function checkErrors($errors): void
+    public function menuItem(array $data, $vendorId): ?MenuItem
+    {
+        $menuItem = new MenuItem($vendorId, $data['name'], $data['allergies'], $data['advanceTime']);
+
+        $errors = $this->validator->validate($menuItem);
+        $is_valid = $this->checkErrors($errors);
+
+        return ($is_valid) ? $menuItem : null;
+    }
+
+    private function checkErrors($errors): bool
     {
         if (count($errors) > 0) {
             $errorsString = (string)$errors;
             $this->console->writeln($errorsString);
+            return false;
         }
+
+        return true;
     }
 }

@@ -58,8 +58,6 @@ class ParserService
         $data = $this->parseLineOfVendor($line);
         $vendor = $this->validatorService->vendor($data);
 
-//        $vendor = Vendor::createFromString($line);
-
         if($vendor){
             $this->pointer = Pointer::MENU_ITEM;
             $this->vendorIdPointer = $vendor->getId();
@@ -71,6 +69,12 @@ class ParserService
 
     private function getMenuItem(string $line): ?MenuItem
     {
+        if(!$this->vendorIdPointer) {
+            return null;
+        }
+
+        $data = $this->parseLineOfMenuItem($line);
+//        $menuItem = $this->validatorService->menuItem($data, $this->vendorIdPointer);
         $menuItem = MenuItem::createFromString($line, $this->vendorIdPointer);
         $this->pointer = ($menuItem) ? Pointer::MENU_ITEM : Pointer::NEW_LINE;
 
@@ -92,7 +96,26 @@ class ParserService
         return [
             'name' => $data[0],
             'postcode' => $data[1],
-            'maxCovers' => $data[2]
+            'maxCovers' => (int) $data[2]
+        ];
+    }
+
+    private function parseLineOfMenuItem(string $line): ?array
+    {
+        if(empty($line)){
+            return null;
+        }
+
+        $data = explode(';', $line);
+
+        if(count($data) != 3) {
+            return null;
+        }
+
+        return [
+            'name' => $data[0],
+            'allergies' => $data[1],
+            'advanceTime' => $data[2]
         ];
     }
 }

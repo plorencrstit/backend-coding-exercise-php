@@ -22,5 +22,14 @@ App\Model\Vendor:
         maxCovers:
             - Type:
                 type: integer
-            - Regex: '/\d*/'
+            - GreaterThan:
+                value: 0
 
+App\Model\MenuItem:
+    properties:
+        name:
+            - Regex: '/[A-Za-z ]*/'
+        allergies:
+            - Regex: '/[A-Za-z]*/'
+        advanceTime:
+            - Regex: '/\d*/'
