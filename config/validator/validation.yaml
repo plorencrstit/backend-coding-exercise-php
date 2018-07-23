@@ -11,3 +11,12 @@ App\Model\Task:
         covers:
             - Type:
                 type: integer
+
+App\Model\Vendor:
+    properties:
+        name:
+            - Regex: '/[A-Za-z ]*/'
+        postcode:
+            - Regex: '/[A-Za-z][A-Za-z0-9]*/'
+        maxCovers:
+            - Regex: '/\d*/'
