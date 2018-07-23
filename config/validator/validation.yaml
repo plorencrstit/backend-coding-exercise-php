@@ -1,0 +1,13 @@
+App\Model\Task:
+    properties:
+        day:
+            - DateTime:
+                format: d/m/y
+        time:
+            - DateTime:
+                format: H:i
+        location:
+            - Regex: '/[A-Za-z][A-Za-z0-9]*/'
+        covers:
+            - Type:
+                type: integer
