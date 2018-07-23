@@ -3,13 +3,13 @@ namespace App\Command;
 
 use App\Model\MenuItem;
 use App\Model\Pointer;
-use App\Model\Task;
 use App\Model\Vendor;
+use App\Service\ValidatorService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 class ExerciseCommand extends Command
 {
@@ -35,31 +35,20 @@ class ExerciseCommand extends Command
         $this->vendorIdPointer = null;
     }
 
+    public function __construct(ValidatorService $validator)
+    {
+        parent::__construct();
+        $this->validator = $validator;
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $filename = $input->getArgument('filename');
-        $day = $input->getArgument('day');
-        $time = $input->getArgument('time');
-        $location = $input->getArgument('location');
-        $covers = $input->getArgument('covers');
 
-//        $output->writeln('Filename: ' . $filename);
-//        $output->writeln('Day: ' . $day);
-//        $output->writeln('Time: ' . $time);
-//        $output->writeln('Location: ' . $location);
-//        $output->writeln('Covers: ' . $covers);
-
-        $task = new Task($day, $time, $location, $covers);
-
-        $errors = $this->validator->validate($task);
-        if (count($errors) > 0) {
-            $errorsString = (string) $errors;
-            $output->writeln($errorsString);
-            return;
-        }
-
-        if(!$task->isOrderDateValid()){
-            $output->writeln('Your order date is past!');
+        try {
+            $task = $this->validator->task($input);
+        } catch (ValidatorException $exception) {
+            $output->writeln($exception->getMessage());
             return;
         }
 
@@ -67,10 +56,6 @@ class ExerciseCommand extends Command
         $menuItems = [];
 
         $file = file(__DIR__ . '/' . $filename, FILE_IGNORE_NEW_LINES);
-
-//        foreach ($file as $line_num => $line) {
-//            $output->writeln('Line ' . $line_num . ': '. $line);
-//        }
 
         foreach ($file as $line) {
 
@@ -97,7 +82,7 @@ class ExerciseCommand extends Command
 //        var_dump('Number of vendors BEFORE validation: ' . count($vendors));
 
         foreach($vendors as $key => $vendor) {
-            $isValidated = $vendor->validate($location, $covers);
+            $isValidated = $vendor->validate($task->location, $task->covers);
             if(!$isValidated) {
                 unset($vendors[$key]);
             }
@@ -146,14 +131,6 @@ class ExerciseCommand extends Command
         $this->pointer = ($menuItem) ? Pointer::MENU_ITEM : Pointer::NEW_LINE;
 
         return $menuItem;
-    }
-
-    /**
-     * @param ValidatorInterface $validator
-     */
-    public function setValidator(ValidatorInterface $validator)
-    {
-        $this->validator = $validator;
     }
 
     public function getIds(array $data): array
