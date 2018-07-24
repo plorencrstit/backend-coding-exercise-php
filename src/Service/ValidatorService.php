@@ -38,11 +38,7 @@ class ValidatorService {
         $errors = $this->validator->validate($task);
         $is_valid = $this->checkErrors($errors);
 
-        var_dump('is_valid');
-        var_dump($is_valid);
-
         if(!$is_valid) {
-            var_dump('throw exception');
             throw new ValidatorException($errors);
         }
 
