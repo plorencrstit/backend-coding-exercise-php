@@ -34,6 +34,6 @@ class MenuItem extends Model
     }
 
     public function toString(): string {
-        return $this->name . ';' . $this->allergies . ';' . $this->advanceTime . 'h';
+        return $this->name . ';' . $this->allergies . ';' . $this->advanceTime;
     }
 }

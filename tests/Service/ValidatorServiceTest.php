@@ -2,27 +2,23 @@
 namespace App\Tests\Service;
 
 use App\Model\MenuItem;
-use App\Model\Task;
 use App\Model\Vendor;
 use App\Service\ValidatorService;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validation;
 
 class ValidatorServiceTest extends TestCase
 {
     private $validator;
-    private $console;
     private $validatorService;
 
     protected function setUp(): void
     {
         $this->validator = Validation::createValidatorBuilder()
             ->addYamlMapping(__DIR__ . '/../../config/validator/validation.yaml')->getValidator();
-        $this->console = new ConsoleOutput();
 
-        $this->validatorService = new ValidatorService($this->validator, $this->console);
+        $this->validatorService = new ValidatorService($this->validator);
     }
 
     public function testVendor(): void
@@ -46,9 +42,9 @@ class ValidatorServiceTest extends TestCase
             'maxCovers' => 5
         ];
 
-        $vendor = $this->validatorService->vendor($data);
+        static::expectException(ValidatorException::class);
 
-        static::assertNull($vendor);
+        $vendor = $this->validatorService->vendor($data);
     }
 
     public function testMenuItem(): void
