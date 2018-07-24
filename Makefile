@@ -1,0 +1,2 @@
+spawn:
+	docker-compose up

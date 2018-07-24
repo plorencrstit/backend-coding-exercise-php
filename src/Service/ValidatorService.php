@@ -38,7 +38,11 @@ class ValidatorService {
         $errors = $this->validator->validate($task);
         $is_valid = $this->checkErrors($errors);
 
+        var_dump('is_valid');
+        var_dump($is_valid);
+
         if(!$is_valid) {
+            var_dump('throw exception');
             throw new ValidatorException($errors);
         }
 
@@ -71,7 +75,7 @@ class ValidatorService {
 
     private function checkErrors($errors): bool
     {
-        if (count($errors) > 0) {
+        if ($errors && count($errors) > 0) {
             $errorsString = (string)$errors;
             $this->console->writeln($errorsString);
             return false;
