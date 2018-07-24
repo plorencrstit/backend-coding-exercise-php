@@ -18,36 +18,7 @@ class Vendor extends Model
         self::$counter++;
     }
 
-    public static function createFromString(string $line) : ?self
-    {
-        if(empty($line)){
-            return null;
-        }
-
-        $data = explode(';', $line);
-
-        if(count($data) != 3) {
-            return null;
-        }
-
-        $result = ['name', 'postcode', 'maxCovers'];
-
-        preg_match('/[A-Za-z ]*/', $data[0], $result['name']);
-        preg_match('/[A-Za-z][A-Za-z0-9]*/', $data[1], $result['postcode']);
-        preg_match('/\d*/', $data[2], $result['maxCovers']);
-
-        $name = $result['name'][0];
-        $postcode = $result['postcode'][0];
-        $maxCovers = $result['maxCovers'][0];
-
-        if($name && $postcode && $maxCovers) {
-            return new Vendor($name, $postcode, $maxCovers);
-        }
-
-        return null;
-    }
-
-    public function validate($postcode, $covers): bool
+    public function search($postcode, $covers): bool
     {
         $vendorShortPostcode = $this->getShortPostcode();
         $orderShortPostcode = $this->getShortPostcode($postcode);

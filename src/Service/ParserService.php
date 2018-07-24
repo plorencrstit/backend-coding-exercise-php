@@ -74,8 +74,12 @@ class ParserService
         }
 
         $data = $this->parseLineOfMenuItem($line);
-//        $menuItem = $this->validatorService->menuItem($data, $this->vendorIdPointer);
-        $menuItem = MenuItem::createFromString($line, $this->vendorIdPointer);
+
+        if (!$data) {
+            return null;
+        }
+
+        $menuItem = $this->validatorService->menuItem($data, $this->vendorIdPointer);
         $this->pointer = ($menuItem) ? Pointer::MENU_ITEM : Pointer::NEW_LINE;
 
         return $menuItem;

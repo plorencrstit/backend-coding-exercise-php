@@ -20,36 +20,7 @@ class MenuItem extends Model
         self::$counter++;
     }
 
-    public static function createFromString(string $line, int $vendorId) : ?self
-    {
-        if(empty($line)){
-            return null;
-        }
-
-        $data = explode(';', $line);
-
-        if(count($data) != 3) {
-            return null;
-        }
-
-        $result = ['name', 'allergies', 'advanceTime'];
-
-        preg_match('/[A-Za-z ]*/', $data[0], $result['name']);
-        preg_match('/[A-Za-z]*/', $data[1], $result['allergies']);
-        preg_match('/\d*/', $data[2], $result['advanceTime']);
-
-        $name = $result['name'][0];
-        $allergies = $result['allergies'][0];
-        $advanceTime = $result['advanceTime'][0];
-
-        if($name && $advanceTime) {
-            return new MenuItem($vendorId, $name, $allergies, $advanceTime);
-        }
-
-        return null;
-    }
-
-    public function validate($period, array $vendorsId): bool
+    public function search($period, array $vendorsId): bool
     {
         if($this->advanceTime > $period) {
             return false;

@@ -2,6 +2,7 @@
 namespace App\Command;
 
 use App\Service\ParserService;
+use App\Service\SearchService;
 use App\Service\ValidatorService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,6 +20,10 @@ class ExerciseCommand extends Command
      * @var ParserService
      */
     private $parserService;
+    /**
+     * @var SearchService
+     */
+    private $searchService;
 
     protected function configure()
     {
@@ -35,11 +40,12 @@ class ExerciseCommand extends Command
         ;
     }
 
-    public function __construct(ValidatorService $validatorService, ParserService $parserService)
+    public function __construct(ValidatorService $validatorService, ParserService $parserService, SearchService $searchService)
     {
         parent::__construct();
         $this->validatorService = $validatorService;
         $this->parserService = $parserService;
+        $this->searchService = $searchService;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -47,41 +53,17 @@ class ExerciseCommand extends Command
         try {
             $task = $this->validatorService->task($input);
             list($vendors, $menuItems) = $this->parserService->parse($input->getArgument('filename'));
+            $vendorsId = $this->searchService->vendor($vendors, $task->location, $task->covers);
+            $menuItems = $this->searchService->menuItem($menuItems, $task->getPeriodInHours(), $vendorsId);
         } catch (ValidatorException $exception) {
             $output->writeln($exception->getMessage());
             return;
-        }
-
-        foreach($vendors as $key => $vendor) {
-            $isValidated = $vendor->validate($task->location, $task->covers);
-            if(!$isValidated) {
-                unset($vendors[$key]);
-            }
-        }
-
-        $vendorsId = $this->getIds($vendors);
-
-        foreach($menuItems as $key => $menuItem) {
-            $isValidated = $menuItem->validate($task->getPeriodInHours(), $vendorsId);
-            if(!$isValidated) {
-                unset($menuItems[$key]);
-            }
         }
 
         foreach($menuItems as $menuItem) {
             $output->writeln($menuItem->toString());
         }
 
-    }
-
-    public function getIds(array $data): array
-    {
-        $result = [];
-        foreach($data as $object) {
-            $result[] = $object->getId();
-        }
-
-        return $result;
     }
 
 }
