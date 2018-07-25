@@ -16,7 +16,7 @@ class ParserService
 
     public function __construct(ValidatorService $validatorService)
     {
-        $this->pointer = Pointer::VENDOR;
+        $this->pointer = Pointer::NEW_LINE;
         $this->vendorIdPointer = null;
         $this->validatorService = $validatorService;
     }
@@ -30,6 +30,11 @@ class ParserService
 
         foreach ($file as $line) {
             switch ($this->pointer) {
+                case Pointer::NEW_LINE:
+                    if (empty($line)) {
+                        break;
+                    }
+                    // no break
                 case Pointer::VENDOR:
                     $vendor = $this->getVendor($line);
                     if ($vendor) {
@@ -40,9 +45,6 @@ class ParserService
                 case Pointer::MENU_ITEM:
                     $menuItems[] = $this->getMenuItem($line);
                     // no break
-                case Pointer::NEW_LINE:
-                    $this->pointer = (empty($line)) ? Pointer::VENDOR : Pointer::MENU_ITEM;
-                    break;
                 default:
                     break;
             }
@@ -71,6 +73,8 @@ class ParserService
 
     private function getMenuItem(string $line): ?MenuItem
     {
+        $this->pointer = Pointer::NEW_LINE;
+
         if (!$this->vendorIdPointer) {
             return null;
         }
