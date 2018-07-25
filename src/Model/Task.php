@@ -20,11 +20,13 @@ class Task extends Model
         $this->orderedAt = new DateTime('now');
     }
 
-    public function getLocation() {
+    public function getLocation()
+    {
         return $this->location;
     }
 
-    public function getCovers() {
+    public function getCovers()
+    {
         return $this->covers;
     }
 

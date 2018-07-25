@@ -21,12 +21,12 @@ class ParserService
         $this->validatorService = $validatorService;
     }
 
-    public function parse(string $filename): array
+    public function parse(string $filename, string $directory): array
     {
         $vendors = [];
         $menuItems = [];
 
-        $file = file(__DIR__ . '/' . $filename, FILE_IGNORE_NEW_LINES);
+        $file = file($directory . '/' . $filename, FILE_IGNORE_NEW_LINES);
 
         foreach ($file as $line) {
             switch ($this->pointer) {

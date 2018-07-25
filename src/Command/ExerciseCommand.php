@@ -24,6 +24,10 @@ class ExerciseCommand extends Command
      * @var SearchService
      */
     private $searchService;
+    /**
+     * @var string
+     */
+    private $fileDirectory;
 
     protected function configure()
     {
@@ -39,19 +43,20 @@ class ExerciseCommand extends Command
             ->addArgument('covers', InputArgument::REQUIRED, 'Covers');
     }
 
-    public function __construct(ValidatorService $validatorService, ParserService $parserService, SearchService $searchService)
+    public function __construct(ValidatorService $validatorService, ParserService $parserService, SearchService $searchService, string $fileDirectory)
     {
         parent::__construct();
         $this->validatorService = $validatorService;
         $this->parserService = $parserService;
         $this->searchService = $searchService;
+        $this->fileDirectory = $fileDirectory;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
             $task = $this->validatorService->task($input);
-            [$vendors, $menuItems] = $this->parserService->parse($input->getArgument('filename'));
+            [$vendors, $menuItems] = $this->parserService->parse($input->getArgument('filename'), $this->fileDirectory);
             $vendorsId = $this->searchService->vendor($vendors, $task->getLocation(), $task->getCovers());
             $menuItems = $this->searchService->menuItem($menuItems, $task->getPeriodInHours(), $vendorsId);
         } catch (ValidatorException $exception) {

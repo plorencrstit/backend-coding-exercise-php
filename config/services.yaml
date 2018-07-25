@@ -24,6 +24,10 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
+    App\Command\ExerciseCommand:
+        arguments:
+          $fileDirectory: '%kernel.root_dir%/../resources/files'
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
