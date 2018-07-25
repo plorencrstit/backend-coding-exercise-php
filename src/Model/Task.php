@@ -39,5 +39,4 @@ class Task extends Model
     {
         return floor($this->getPeriod() / 3660);
     }
-
 }

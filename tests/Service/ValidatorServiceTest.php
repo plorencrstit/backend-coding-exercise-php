@@ -24,9 +24,9 @@ class ValidatorServiceTest extends TestCase
     public function testVendor(): void
     {
         $data = [
-            'name' => 'name-test',
-            'postcode' => 'NW12345',
-            'maxCovers' => 5
+            'name'      => 'name-test',
+            'postcode'  => 'NW12345',
+            'maxCovers' => 5,
         ];
 
         $vendor = $this->validatorService->vendor($data);
@@ -37,9 +37,9 @@ class ValidatorServiceTest extends TestCase
     public function testVendorWithErrors(): void
     {
         $data = [
-            'name' => 'name-test',
-            'postcode' => 111,
-            'maxCovers' => 5
+            'name'      => 'name-test',
+            'postcode'  => 111,
+            'maxCovers' => 5,
         ];
 
         static::expectException(ValidatorException::class);
@@ -50,9 +50,9 @@ class ValidatorServiceTest extends TestCase
     public function testMenuItem(): void
     {
         $data = [
-            'name' => 'name-test',
-            'allergies' => 'NW12345',
-            'advanceTime' => '5h'
+            'name'        => 'name-test',
+            'allergies'   => 'NW12345',
+            'advanceTime' => '5h',
         ];
 
         $vendorId = 1;
@@ -61,5 +61,4 @@ class ValidatorServiceTest extends TestCase
 
         static::assertTrue($menuItem instanceof MenuItem);
     }
-
 }

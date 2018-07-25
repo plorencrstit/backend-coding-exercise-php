@@ -22,18 +22,19 @@ class MenuItem extends Model
 
     public function search($period, array $vendorsId): bool
     {
-        if($this->advanceTime > $period) {
+        if ($this->advanceTime > $period) {
             return false;
         }
 
-        if(!in_array($this->vendorId, $vendorsId)) {
+        if (!in_array($this->vendorId, $vendorsId)) {
             return false;
         }
 
         return true;
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return $this->name . ';' . $this->allergies . ';' . $this->advanceTime;
     }
 }

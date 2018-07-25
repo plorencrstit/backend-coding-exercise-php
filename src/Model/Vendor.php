@@ -23,11 +23,11 @@ class Vendor extends Model
         $vendorShortPostcode = $this->getShortPostcode();
         $orderShortPostcode = $this->getShortPostcode($postcode);
 
-        if($vendorShortPostcode != $orderShortPostcode) {
+        if ($vendorShortPostcode != $orderShortPostcode) {
             return false;
         }
 
-        if($covers > $this->maxCovers) {
+        if ($covers > $this->maxCovers) {
             return false;
         }
 
@@ -38,7 +38,6 @@ class Vendor extends Model
     {
         $postcode = $postcode ?? $this->postcode;
 
-        return substr($postcode, 0, -4);
+        return mb_substr($postcode, 0, -4);
     }
-
 }

@@ -36,8 +36,7 @@ class ExerciseCommand extends Command
             ->addArgument('day', InputArgument::REQUIRED, 'Day')
             ->addArgument('time', InputArgument::REQUIRED, 'Time')
             ->addArgument('location', InputArgument::REQUIRED, 'Location')
-            ->addArgument('covers', InputArgument::REQUIRED, 'Covers')
-        ;
+            ->addArgument('covers', InputArgument::REQUIRED, 'Covers');
     }
 
     public function __construct(ValidatorService $validatorService, ParserService $parserService, SearchService $searchService)
@@ -52,18 +51,17 @@ class ExerciseCommand extends Command
     {
         try {
             $task = $this->validatorService->task($input);
-            list($vendors, $menuItems) = $this->parserService->parse($input->getArgument('filename'));
+            [$vendors, $menuItems] = $this->parserService->parse($input->getArgument('filename'));
             $vendorsId = $this->searchService->vendor($vendors, $task->location, $task->covers);
             $menuItems = $this->searchService->menuItem($menuItems, $task->getPeriodInHours(), $vendorsId);
         } catch (ValidatorException $exception) {
             $output->writeln($exception->getMessage());
+
             return;
         }
 
-        foreach($menuItems as $menuItem) {
+        foreach ($menuItems as $menuItem) {
             $output->writeln($menuItem->toString());
         }
-
     }
-
 }

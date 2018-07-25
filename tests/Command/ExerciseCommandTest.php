@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validation;
 
 class ExerciseCommandTest extends KernelTestCase
@@ -44,16 +43,15 @@ class ExerciseCommandTest extends KernelTestCase
         $command = $application->find('app:exercise');
         $commandTester = new CommandTester($command);
         $commandTester->execute(
-            array(
+            [
                 'filename'  => 'my-example',
-                'day'    => '30/07/18',
-                'time' => '11:00',
-                'location' => 'NW1234',
-                'covers' => 5
-            )
+                'day'       => '30/07/18',
+                'time'      => '11:00',
+                'location'  => 'NW1234',
+                'covers'    => 5,
+            ]
         );
 
         $this->assertRegExp('/Pizza/', $commandTester->getDisplay());
     }
-
 }

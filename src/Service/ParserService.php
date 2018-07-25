@@ -29,16 +29,17 @@ class ParserService
         $file = file(__DIR__ . '/' . $filename, FILE_IGNORE_NEW_LINES);
 
         foreach ($file as $line) {
-
-            switch($this->pointer){
+            switch ($this->pointer) {
                 case Pointer::VENDOR:
                     $vendor = $this->getVendor($line);
-                    if($vendor) {
+                    if ($vendor) {
                         $vendors[] = $vendor;
                         break;
                     }
+                    // no break
                 case Pointer::MENU_ITEM:
                     $menuItems[] = $this->getMenuItem($line);
+                    // no break
                 case Pointer::NEW_LINE:
                     $this->pointer = (empty($line)) ? Pointer::VENDOR : Pointer::MENU_ITEM;
                     break;
@@ -58,9 +59,10 @@ class ParserService
         $data = $this->parseLineOfVendor($line);
         $vendor = $this->validatorService->vendor($data);
 
-        if($vendor){
+        if ($vendor) {
             $this->pointer = Pointer::MENU_ITEM;
             $this->vendorIdPointer = $vendor->getId();
+
             return $vendor;
         }
 
@@ -69,7 +71,7 @@ class ParserService
 
     private function getMenuItem(string $line): ?MenuItem
     {
-        if(!$this->vendorIdPointer) {
+        if (!$this->vendorIdPointer) {
             return null;
         }
 
@@ -87,39 +89,39 @@ class ParserService
 
     private function parseLineOfVendor(string $line): ?array
     {
-        if(empty($line)){
+        if (empty($line)) {
             return null;
         }
 
         $data = explode(';', $line);
 
-        if(count($data) != 3) {
+        if (count($data) != 3) {
             return null;
         }
 
         return [
-            'name' => $data[0],
-            'postcode' => $data[1],
-            'maxCovers' => (int) $data[2]
+            'name'      => $data[0],
+            'postcode'  => $data[1],
+            'maxCovers' => (int) $data[2],
         ];
     }
 
     private function parseLineOfMenuItem(string $line): ?array
     {
-        if(empty($line)){
+        if (empty($line)) {
             return null;
         }
 
         $data = explode(';', $line);
 
-        if(count($data) != 3) {
+        if (count($data) != 3) {
             return null;
         }
 
         return [
-            'name' => $data[0],
-            'allergies' => $data[1],
-            'advanceTime' => $data[2]
+            'name'        => $data[0],
+            'allergies'   => $data[1],
+            'advanceTime' => $data[2],
         ];
     }
 }

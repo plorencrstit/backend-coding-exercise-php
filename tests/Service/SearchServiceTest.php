@@ -36,11 +36,10 @@ class SearchServiceTest extends TestCase
         $menuItems = [$menuItem1, $menuItem2];
 
         $period = 5;
-        $vendorsId = [1,2,3];
+        $vendorsId = [1, 2, 3];
 
         $menuItems = $this->searchService->menuItem($menuItems, $period, $vendorsId);
 
         static::assertInternalType('array', $menuItems);
     }
-
 }

@@ -8,8 +8,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ValidatorService {
-
+class ValidatorService
+{
     /**
      * @var ValidatorInterface
      */
@@ -32,7 +32,7 @@ class ValidatorService {
         $errors = $this->validator->validate($task);
         $this->checkErrors($errors);
 
-        if(!$task->isOrderDateValid()){
+        if (!$task->isOrderDateValid()) {
             throw new ValidatorException('Your order date is past!');
         }
 
@@ -62,7 +62,7 @@ class ValidatorService {
     private function checkErrors($errors): void
     {
         if ($errors && count($errors) > 0) {
-            throw new ValidatorException((string)$errors);
+            throw new ValidatorException((string) $errors);
         }
     }
 }
