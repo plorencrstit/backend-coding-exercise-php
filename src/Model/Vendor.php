@@ -5,9 +5,9 @@ class Vendor extends Model
 {
     public static $counter = 1;
 
-    public $name;
-    public $postcode;
-    public $maxCovers;
+    private $name;
+    private $postcode;
+    private $maxCovers;
 
     public function __construct($name, $postcode, $maxCovers)
     {

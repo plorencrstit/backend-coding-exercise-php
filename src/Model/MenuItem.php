@@ -5,10 +5,10 @@ class MenuItem extends Model
 {
     public static $counter = 1;
 
-    public $vendorId;
-    public $name;
-    public $allergies;
-    public $advanceTime;
+    private $vendorId;
+    private $name;
+    private $allergies;
+    private $advanceTime;
 
     public function __construct($vendorId, $name, $allergies, $advanceTime)
     {

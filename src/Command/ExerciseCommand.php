@@ -52,7 +52,7 @@ class ExerciseCommand extends Command
         try {
             $task = $this->validatorService->task($input);
             [$vendors, $menuItems] = $this->parserService->parse($input->getArgument('filename'));
-            $vendorsId = $this->searchService->vendor($vendors, $task->location, $task->covers);
+            $vendorsId = $this->searchService->vendor($vendors, $task->getLocation(), $task->getCovers());
             $menuItems = $this->searchService->menuItem($menuItems, $task->getPeriodInHours(), $vendorsId);
         } catch (ValidatorException $exception) {
             $output->writeln($exception->getMessage());

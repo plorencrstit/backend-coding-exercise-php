@@ -5,11 +5,11 @@ use DateTime;
 
 class Task extends Model
 {
-    public $day;
-    public $time;
-    public $location;
-    public $covers;
-    public $orderedAt;
+    private $day;
+    private $time;
+    private $location;
+    private $covers;
+    private $orderedAt;
 
     public function __construct($day, $time, $location, $covers)
     {
@@ -18,6 +18,14 @@ class Task extends Model
         $this->location = $location;
         $this->covers = $covers;
         $this->orderedAt = new DateTime('now');
+    }
+
+    public function getLocation() {
+        return $this->location;
+    }
+
+    public function getCovers() {
+        return $this->covers;
     }
 
     public function getSearchDateTime(): DateTime
